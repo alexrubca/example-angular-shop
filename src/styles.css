@@ -1,12 +1,26 @@
 @import "tailwindcss";
+
 /* Montserrat local font */
 @font-face {
   font-family: Montserrat;
   src: url('/assets/fonts/montserrat-alternates/MontserratAlternates-Medium.ttf') format('truetype');
 }
+
 @layer base {
   .font-montserrat {
     font-family: 'Montserrat', sans-serif;
+  }
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 }
 
