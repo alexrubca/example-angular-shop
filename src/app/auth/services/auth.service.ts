@@ -13,7 +13,7 @@ const baseUrl = environment.baseUrl;
 export class AuthService {
   private _authStatus = signal<AuthStatus>('checking')
   private _user = signal<User|null>(null);
-  private _token = signal<string|null>(null);
+  private _token = signal<string|null>(localStorage.getItem('token'));
 
   private http = inject(HttpClient);
 
@@ -48,10 +48,17 @@ export class AuthService {
       return of(false);
     }
     return this.http.get<AuthResponse>(`${baseUrl}/auth/check-status`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
+      // headers: {
+      //   'Authorization': `Bearer ${token}`
+      // }
     }).pipe(
+      map(resp => this.handleAuthSuccess(resp)),
+      catchError((error: any) => this.handleAuthError(error))
+    );
+  }
+
+  register(fullName: string, email: string, password: string): Observable<boolean> {
+    return this.http.post<AuthResponse>(`${baseUrl}/auth/register`, {fullName, email, password}).pipe(
       map(resp => this.handleAuthSuccess(resp)),
       catchError((error: any) => this.handleAuthError(error))
     );
